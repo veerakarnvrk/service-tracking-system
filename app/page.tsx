@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <Shell>
       <form action="/track" className="card">
-        <h1>ตรวจสอบสถานะรถ</h1>
+        <h1>ตรวจสอบสถานะการเข้ารับบริการ</h1>
         <div className="mu">กรอกทะเบียนรถและวันที่นำรถเข้ารับบริการ</div>
         <label>ทะเบียนรถ</label>
         <input name="plate" required placeholder="เช่น 1กก 1234" autoComplete="off" />

@@ -6,7 +6,7 @@ import { STL, baht, norm, type Job } from "@/lib/consts";
 export const dynamic = "force-dynamic";
 
 export default async function Track({ searchParams }: { searchParams: { plate?: string; date?: string } }) {
-  const { data } = await db.from("jobs").select("*").eq("plate_norm", norm(searchParams.plate || "")).eq("visit_date", searchParams.date || "1970-01-01").maybeSingle();
+  const { data } = await db.from("jobs").select("*").eq("plate_norm", norm(searchParams.plate || "")).eq("visit_date", searchParams.date || "1970-01-01").order("created_at", { ascending: false }).limit(1).maybeSingle();
   const j = data as Job | null;
   if (!j) return (
     <Shell><div className="card"><h1>ไม่พบข้อมูล</h1><div className="mu">กรุณาตรวจสอบทะเบียนและวันที่อีกครั้ง หรือสอบถามที่หน้าร้าน</div><br /><a className="lk" href="/">← ลองใหม่</a></div></Shell>
