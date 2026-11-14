@@ -4,7 +4,7 @@ export default function Shell({ children, me, wide }: { children: React.ReactNod
   return (
     <div className={"wrap" + (wide ? " wide" : "")}>
       <header>
-        <div className="logo">ALL <b>EV</b> SERVICE</div>
+        <div className="logo">Service <b>Tracking</b> System</div>
         {me && (
           <div className="row" style={{ flex: "none", alignItems: "center" }}>
             <span className="mu">{me.name}</span>
