@@ -9,8 +9,10 @@ import { norm } from "@/lib/consts";
 
 export async function login(_prev: string, fd: FormData): Promise<string> {
   const pin = String(fd.get("pin") || "");
-  const { data } = await db.from("staff").select("*");
-  const u = data?.find((s) => bcrypt.compareSync(pin, s.pin_hash));
+  const { data, error } = await db.from("staff").select("*");
+  if (error) return "เชื่อมต่อฐานข้อมูลไม่ได้: " + error.message;
+  if (!data?.length) return "อ่านข้อมูลพนักงานไม่ได้ ตรวจ SUPABASE_SERVICE_ROLE_KEY";
+  const u = data.find((s) => bcrypt.compareSync(pin, s.pin_hash));
   if (!u) return "รหัสไม่ถูกต้อง";
   await setSession({ id: u.id, name: u.name, role: u.role });
   redirect(u.role === "admin" ? "/staff/admin" : "/staff/foreman");
