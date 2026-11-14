@@ -9,7 +9,7 @@ export default async function Track({ searchParams }: { searchParams: { plate?: 
   const { data } = await db.from("jobs").select("*").eq("plate_norm", norm(searchParams.plate || "")).eq("visit_date", searchParams.date || "1970-01-01").order("created_at", { ascending: false }).limit(1).maybeSingle();
   const j = data as Job | null;
   if (!j) return (
-    <Shell><div className="card"><h1>ไม่พบข้อมูล</h1><div className="mu">กรุณาตรวจสอบทะเบียนและวันที่อีกครั้ง หรือสอบถามที่หน้าร้าน</div><br /><a className="lk" href="/">← ลองใหม่</a></div></Shell>
+    <Shell><div className="card"><h1>ไม่พบข้อมูล</h1><div className="mu">กรุณาตรวจสอบทะเบียนและวันที่อีกครั้งหรือสอบถามที่หน้าร้าน</div><br /><a className="lk" href="/">← ลองใหม่</a></div></Shell>
   );
   const ups = await loadUpdates(j.id);
   const list = (a: string[], empty: string) => a.length ? <ul className="l">{a.map((x, i) => <li key={i}>{x}</li>)}</ul> : <div className="mu">{empty}</div>;
@@ -17,7 +17,7 @@ export default async function Track({ searchParams }: { searchParams: { plate?: 
     <Shell>
       <div className="card res">
         <div className="plate">{j.plate}</div>
-        <div className="mu">{j.brand} · เข้าซ่อม {j.visit_date}</div>
+        <div className="mu">{j.brand} · วันที่เข้าซ่อม {j.visit_date}</div>
         <div style={{ margin: "10px 0" }}><span className={"badge" + (j.status === "waitpart" ? " w" : "")}>{STL[j.status]}</span></div>
         <Steps status={j.status} />
         <h3>รายละเอียดแต่ละขั้นตอน</h3><StageRows job={j} ups={ups} />
