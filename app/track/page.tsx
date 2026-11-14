@@ -2,7 +2,7 @@ import Shell from "@/components/Shell";
 import { Steps, StageRows, Timeline } from "@/components/JobView";
 import { db } from "@/lib/db";
 import { loadUpdates } from "@/lib/data";
-import { STL, baht, norm, type Job } from "@/lib/consts";
+import { STL, baht, norm, dayTh, type Job } from "@/lib/consts";
 export const dynamic = "force-dynamic";
 
 export default async function Track({ searchParams }: { searchParams: { plate?: string; date?: string } }) {
@@ -17,7 +17,7 @@ export default async function Track({ searchParams }: { searchParams: { plate?: 
     <Shell>
       <div className="card res">
         <div className="plate">{j.plate}</div>
-        <div className="mu">{j.brand} · วันที่เข้าซ่อม {j.visit_date}</div>
+        <div className="mu">{j.brand} · วันที่เข้าซ่อม {dayTh(j.visit_date)}</div>
         <div style={{ margin: "10px 0" }}><span className={"badge" + (j.status === "waitpart" ? " w" : "")}>{STL[j.status]}</span></div>
         <Steps status={j.status} />
         <h3>รายละเอียดแต่ละขั้นตอน</h3><StageRows job={j} ups={ups} />

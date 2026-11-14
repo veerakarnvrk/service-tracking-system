@@ -5,7 +5,19 @@ export type Job = { id: string; plate: string; visit_date: string; brand: string
 export type Media = { path: string; name: string; type: string; url?: string };
 export type Upd = { id: string; status: string; by_name: string; mechs: string[]; note: string; media: Media[]; created_at: string };
 const TZ = "Asia/Bangkok";
-export const tm = (t: string | number | Date) => new Date(t).toLocaleString("th-TH", { timeZone: TZ, day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", hourCycle: "h23" });
+// ===== มาตรฐานวันที่/เวลาของทั้งโปรเจกต์ =====
+// วันที่: วัน เดือน ปี พ.ศ. เช่น 14 พ.ย. 2569 | เวลา: 24 ชม. เช่น 16:03 (เขตเวลาไทย)
+// ฟีเจอร์ใหม่ที่ต้องแสดงวันเวลา ให้ใช้ dateTh / timeTh / tm / dayTh เท่านั้น ห้ามจัดรูปแบบเอง
+const MONTHS = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+const parts = (t: string | number | Date) => {
+  const p = new Intl.DateTimeFormat("en-GB", { timeZone: TZ, year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(new Date(t));
+  const v = (k: string) => p.find((x) => x.type === k)!.value;
+  return { y: +v("year"), m: +v("month"), d: +v("day"), h: v("hour"), mi: v("minute") };
+};
+export const dateTh = (t: string | number | Date) => { const p = parts(t); return `${p.d} ${MONTHS[p.m - 1]} ${p.y + 543}`; };
+export const timeTh = (t: string | number | Date) => { const p = parts(t); return `${p.h}:${p.mi}`; };
+export const tm = (t: string | number | Date) => `${dateTh(t)} ${timeTh(t)}`;
+export const dayTh = (ymd: string) => dateTh(`${ymd}T12:00:00+07:00`); // สำหรับวันที่ล้วน เช่น visit_date
 export const dur = (ms: number) => { const m = Math.max(0, Math.round(ms / 60000)); return m < 60 ? `${m} นาที` : `${Math.floor(m / 60)} ชม.${m % 60 ? ` ${m % 60} นาที` : ""}`; };
 export const baht = (n: number) => `${Number(n || 0).toLocaleString("th-TH")} บาท`;
 export const norm = (s: string) => s.replace(/[\s\-.]/g, "").toLowerCase();
